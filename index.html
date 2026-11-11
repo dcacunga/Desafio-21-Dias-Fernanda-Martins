@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          if (originalFetch) {
+            window.fetch = function(input, init) {
+              try {
+                var url = typeof input === 'string' ? input : (input && input.url ? input.url : '');
+                if (url && (url.indexOf('b-cdn.net') !== -1 || url.indexOf('vturb.com') !== -1 || (url.indexOf('/x') !== -1 && url.indexOf('converteai') !== -1))) {
+                  return Promise.resolve(new Response(JSON.stringify({ status: 'ok', success: true }), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' }
+                  }));
+                }
+              } catch (_) {}
+              return originalFetch.apply(this, arguments);
+            };
+          }
+        } catch (_) {}
+
+        try {
+          var originalError = console.error;
+          if (originalError) {
+            console.error = function() {
+              try {
+                var msg = arguments && arguments[0];
+                var str = typeof msg === 'string' ? msg : (msg && msg.message ? msg.message : '');
+                if (str.indexOf('Analytics Services - Hermes') !== -1 || str.indexOf('vt-h-1.b-cdn.net') !== -1) {
+                  return;
+                }
+              } catch (_) {}
+              return originalError.apply(console, arguments);
+            };
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <meta name="theme-color" content="#ec4899" />
+    <title>Desafio 21 Dias · Fernanda Martins</title>
+    <meta name="description" content="Descobre o teu ponto de partida e conhece o desafio de 21 dias de Pilates na Parede com Fernanda Martins. Aulas sem sair de casa." />
+    <link rel="icon" href="/assets/favicon-CtQxv6np.svg" type="image/svg+xml" />
+    <meta property="og:title" content="Desafio 21 Dias · Fernanda Martins" />
+    <meta property="og:description" content="Descobre o teu ponto de partida e conhece o desafio de 21 dias de Pilates na Parede com Fernanda Martins. Aulas sem sair de casa." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
